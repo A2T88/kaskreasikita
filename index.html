@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kreasikita Membrane - Buku Kas Harian</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Library untuk Cetak PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <div class="container" id="pdf-content">
+        <!-- HEADER -->
+        <header class="app-header">
+            <h1>KREASIKITA MEMBRANE</h1>
+            <p>Vendor & Aplikator Tenda Membran, Kanopi Kain, Awning Gulung, Pagar, & Tralis</p>
+        </header>
+
+        <!-- DASHBOARD / RINGKASAN -->
+        <div class="dashboard">
+            <div class="card">
+                <h3>Total Kas Masuk</h3>
+                <p id="total-masuk" class="text-green">Rp0</p>
+            </div>
+            <div class="card">
+                <h3>Total Kas Keluar</h3>
+                <p id="total-keluar" class="text-red">Rp0</p>
+            </div>
+            <div class="card">
+                <h3>Saldo Akhir Kas</h3>
+                <p id="saldo-akhir" class="text-blue">Rp0</p>
+            </div>
+        </div>
+
+        <!-- KONTROL & TABEL KATEGORI OTOMATIS (DENGAN SCROLL/DROPDOWN) -->
+        <div class="grid-section">
+            <div class="control-box">
+                <h3>Pengaturan Saldo Awal</h3>
+                <div class="form-group">
+                    <label>Periode:</label>
+                    <input type="text" id="periode-input" value="Oktober 2026">
+                </div>
+                <div class="form-group">
+                    <label>Saldo Awal Kas (Rp):</label>
+                    <input type="text" id="saldo-awal-input" value="0" oninput="formatInputRupiah(this); hitungKas();">
+                </div>
+                <button class="btn btn-primary" onclick="bukaModalTambah()">+ Tambah Transaksi</button>
+                <button class="btn btn-pdf" onclick="cetakPDF()">Cetak / Unduh PDF</button>
+            </div>
+
+            <div class="category-box">
+                <h3>Rekapitulasi Kategori Otomatis</h3>
+                <div class="table-container scrollable-table">
+                    <table id="tabel-kategori">
+                        <thead>
+                            <tr>
+                                <th>Kategori</th>
+                                <th>Total Masuk</th>
+                                <th>Total Keluar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Terisi otomatis oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABEL UTAMA TRANSAKSI DENGAN SCROLL/DROPDOWN -->
+        <div class="transaction-section">
+            <h3>Daftar Transaksi Harian</h3>
+            <div class="table-container scrollable-table">
+                <table id="tabel-transaksi">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Uraian / Keterangan</th>
+                            <th>Kategori</th>
+                            <th>Kas Masuk</th>
+                            <th>Kas Keluar</th>
+                            <th>Saldo Kas</th>
+                            <th class="no-print">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Terisi otomatis oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL INPUT / EDIT TRANSAKSI -->
+    <div id="modal-transaksi" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="tutupModal()">&times;</span>
+            <h3 id="modal-title">Tambah Transaksi Baru</h3>
+            <form id="form-transaksi" onsubmit="simpanTransaksi(event)">
+                <input type="hidden" id="edit-index" value="-1">
+                <div class="form-group">
+                    <label>Tanggal:</label>
+                    <input type="date" id="trans-tanggal" required>
+                </div>
+                <div class="form-group">
+                    <label>Uraian / Keterangan:</label>
+                    <input type="text" id="trans-uraian" placeholder="Contoh: Termin I / Beli Kain" required>
+                </div>
+                <div class="form-group">
+                    <label>Kategori (Ketik Bebas):</label>
+                    <input type="text" id="trans-kategori" placeholder="Contoh: Termin, Rokok, Material" required>
+                </div>
+                <div class="form-group">
+                    <label>Jenis Arus Kas:</label>
+                    <select id="trans-jenis" required>
+                        <option value="masuk">Kas Masuk (Penerimaan)</option>
+                        <option value="keluar">Kas Keluar (Pengeluaran)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nominal (Rp):</label>
+                    <input type="text" id="trans-nominal" placeholder="0" oninput="formatInputRupiah(this)" required>
+                </div>
+                <button type="submit" class="btn btn-success">Simpan Transaksi</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- FOOTER / CREDIT LINK ABV18+ -->
+    <footer class="app-footer">
+        <p>Aplikasi Buku Kas Kreasikita Membrane | Dibuat oleh <a href="https://wa.me/6289528875786" target="_blank">ABV18+</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
